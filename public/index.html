@@ -17,13 +17,18 @@
 			</button>	
 		</span>
 		<div class="choose">
-			<a href="1">老师</a>
-			<a href="2">学校</a>
-			<a href="3">方向</a>
-			<a href="4">职称</a>
+			<a class = "tab" href="1">老师</a>
+			<a class = "tab" href="2">学校</a>
+			<a class = "tab" href="3">方向</a>
+			<a class = "tab" href="4">职称</a>
 		</div>
 	</div>
 	<div class="container"></div>
 	<div class="footer"></div>
+	<script type="text/javascript">
+		function uploadid (id) {
+			$.get("/uploadid", {"id" : id}	);			
+		}
+	</script>
 </body>
 </html>

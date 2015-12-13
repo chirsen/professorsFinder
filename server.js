@@ -19,6 +19,9 @@ var pool = mysql.createPool({
 
 app.use(express.static('public'));
 
+
+//如下的所有get均为路由，用于处理客户端提交的请求
+
 app.get('/reserchersFinder', function(req, res) {
 	var pathname = url.parse(req.url).pathname;
 	res.sendFile(__dirname + "/" + "index.html");
@@ -63,13 +66,19 @@ app.get("/upload", function(req, res) {
 		console.log("拼接之后的text: " + text);
 
 		//根据输入的字符串和选择进行查询：
-		var query = "select * from ccnu where " + tab + " like '" + text + "' limit 10";
+		var query;
+		if(text == ""){
+			query = "select * from ccnu order by hot desc limit 10";	
+		}else{
+			query = "select * from ccnu where " + tab + " like '" + text + "' order by hot desc limit 10";
+		}
 		//打印查询语句：
 		console.log(query);
 		connction.query(query, function(error, rows) {
 			var professors = new Object();
 			for (var i = 0; i < rows.length; i++) {
 				var professor = new Object();
+				professor.id = rows[i].id;
 				professor.name = rows[i].name;
 				professor.direction = rows[i].direction;
 				professor.position = rows[i].position;
@@ -81,12 +90,29 @@ app.get("/upload", function(req, res) {
 			console.log(professors);
 			connction.release();
 			var text = JSON.stringify(professors);
-			console.log("得到的JSON字符串：" + text);
 			res.send(JSON.stringify(professors));
 		});
 
 	});
 
+});
+
+//根据点击的id确定搜索的热度（hot值）
+app.get("/uploadid", function(req, res){
+	//log中输出选择的id
+	console.log("选择的链接的id为："+req.query.id);
+	pool.getConnection(function(err, connection){
+		if(err){console.log("链接数据库不成功");}
+		connection.query("select hot from ccnu where id = "+req.query.id, function(error1, rows1){
+			if(error1){console.log("查询hot值不成功");}
+			var hot = ++rows1[0].hot;
+			connection.query("update ccnu set hot = "+hot+" where id = "+req.query.id, function(error2, rows2){
+				if(error2){console.log("更新hot值不成功");}
+				console.log("更新hot值为："+hot);
+				connection.release();
+			});
+		});
+	});
 });
 
 var server = app.listen(8081, function() {

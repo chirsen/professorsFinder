@@ -15,7 +15,11 @@ $(document).ready(function(){
 		$.getJSON("/upload", {"text":text, "choose" : choose_a.attr("href")}, function(result){
 			$(".container").html("");
 			$.each(result, function(i, field){
-       			$(".container").append("<div class='item'><p>名字"+field.name+"</p><p>链接：<a target='_blank' href="+field.link+">"+field.link+"</a></p></div>");
+       			$(".container").append("<div class='item'><p>名字: "
+       				+field.name+"</p><p>链接：<a onclick='uploadid("
+       					+field.id+")' target='_blank' href="
+       				+field.link+">"
+       				+field.link+"</a></p></div>");
      		});
 		});
 	};

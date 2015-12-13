@@ -55,9 +55,14 @@
 .item{
 	margin-bottom: 20px;
 	height:100px;
-	width: 100px;
 	background: #eeeeee;
+}
 
+.tab{
+	font-family: arial, georgia, verdana, simsun, helvetica, sans-serif;
+	font-size: 1.2rem;
+	text-decoration: none;
+	color: black;	
 }
 
 input{
@@ -81,10 +86,4 @@ button{
 	border-color: #647ED9;
 	border-top-right-radius: 3px;
 	border-bottom-right-radius: 3px;
-}
-a{
-	font-family: arial, georgia, verdana, simsun, helvetica, sans-serif;
-	font-size: 1.2rem;
-	text-decoration: none;
-	color: black;
 }
