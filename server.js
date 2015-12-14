@@ -35,9 +35,10 @@ app.get("/upload", function(req, res) {
 			console.log("连接错误");
 			throw err;
 		}
-		//获取输入框和选择的内容
+		//获取输入框和选择的内容并且获取分页的信息
 		var text = req.query.text;
 		var choose = req.query.choose;
+		var currentPage = req.query.currentPage;
 		console.log("提交的文字：" + text + "选择的choose: " + choose);
 		//根据选择的内容进行相应的查询
 		var tab;
@@ -68,15 +69,23 @@ app.get("/upload", function(req, res) {
 		//根据输入的字符串和选择进行查询：
 		var query;
 		if(text == ""){
-			query = "select * from ccnu order by hot desc limit 10";	
+			query = "select * from ccnu order by hot limit 10";	
 		}else{
-			query = "select * from ccnu where " + tab + " like '" + text + "' order by hot desc limit 10";
+			query = "select * from ccnu where " + tab + " like '" + text + "' order by hot";
 		}
 		//打印查询语句：
 		console.log(query);
 		connction.query(query, function(error, rows) {
+			//获取查询的数量
+			var rowsSize = rows.length;
+			//需要传递给页面的数量
+			var start = Number(currentPage-1)*10;
+			var end = ((rowsSize - start)>=10)?(start+10):(rowsSize);
+			//构建要传递的对象（当前页，传递给当前页的数据）
+			console.log("开头页码和结尾页码："+start+" "+end);
 			var professors = new Object();
-			for (var i = 0; i < rows.length; i++) {
+			var j = 0;
+			for (var i = start; i < end; i++) {
 				var professor = new Object();
 				professor.id = rows[i].id;
 				professor.name = rows[i].name;
@@ -84,13 +93,14 @@ app.get("/upload", function(req, res) {
 				professor.position = rows[i].position;
 				professor.school = rows[i].school;
 				professor.link = rows[i].link;
-				professors[i] = professor;
+				professors[j++] = professor;
+				console.log(rows[i].name);
 			}
-
-			console.log(professors);
+			var result = {"currentPage":currentPage, "totalPages":(rowsSize/10), "professors": professors};
+			console.log(result);
 			connction.release();
 			var text = JSON.stringify(professors);
-			res.send(JSON.stringify(professors));
+			res.end(JSON.stringify(result));
 		});
 
 	});

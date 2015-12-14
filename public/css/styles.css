@@ -37,8 +37,22 @@
 	position: absolute;
 	top:4.0rem;
 	width: 80%;
-	height: 200px;
 }
+
+.pages{
+	height: 1.5rem;
+	border: 1px solid #647ED9;
+	background-color: #fefefe;
+}
+
+.page_item1 .page_item2{
+	border: 1px solid #647ED9;
+	background-color: #fefefe;
+	height: :1.5rem;
+}
+
+.page_item1{width: 6rem;}
+.page_item2{width: 3rem;}
 
 .choose{
 	position: absolute;
@@ -54,7 +68,7 @@
 
 .item{
 	margin-bottom: 20px;
-	height:100px;
+	height:8rem;
 	background: #eeeeee;
 }
 
