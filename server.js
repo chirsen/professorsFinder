@@ -60,6 +60,7 @@ app.get("/upload", function(req, res) {
 		var myCars = new Array();
 		myCars[0] = "%";
 		for (var i = 0; i < text.length; i++) {
+			if(text.charAt(i) == "%" || text.charAt(i) == "*" text.charAt(i) == "")
 			myCars[i + 1] = text.charAt(i) + "%";
 		}
 		text = myCars.join("");

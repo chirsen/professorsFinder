@@ -10,12 +10,9 @@ $(document).ready(function() {
 	});
 
 
-	$(".page_item2").click(function() {
-		alert()
-	});
 	//当连接被点击
-	$("a").click(function() {
-		$("a").css({
+	$(".tab").click(function() {
+		$(".tab").css({
 			"fontWeight": "normal",
 			"text-decoration": "none"
 		});
@@ -32,7 +29,7 @@ $(document).ready(function() {
 				"top": "0px",
 				"left": "10%"
 			});
-			upload(text, choose_a, 1);
+			upload(text, choose_a.attr("href"), 1);
 		}
 		return false;
 	});
@@ -48,7 +45,7 @@ $(document).ready(function() {
 		var choose_a = $("a").filter(function(index) {
 			return $(this).css("fontWeight") == "bold";
 		});
-		upload(text, choose_a, 1);
+		upload(text, choose_a.attr("href"), 1);
 	});
 	$("#search_button").mouseover(function() {
 		$(this).css("background-color", "#6079D5");
@@ -68,7 +65,7 @@ $(document).ready(function() {
 			var choose_a = $("a").filter(function(index) {
 				return $(this).css("fontWeight") == "bold";
 			});
-			upload(text, choose_a, 1);
+			upload(text, choose_a.attr("href"), 1);
 		}
 	});
 
@@ -79,7 +76,7 @@ $(document).ready(function() {
 var upload = function(text, choose_a, currentPage) {
 	$.getJSON("/upload", {
 		"text": text,
-		"choose": choose_a.attr("href"),
+		"choose": choose_a,
 		"currentPage": currentPage
 	}, function(result) {
 		$(".container").html("");
@@ -92,29 +89,32 @@ var upload = function(text, choose_a, currentPage) {
 		//如果总的页数小于或者等于1
 		if (result.totalPages > 1 && result.totalPages <= 10) {
 			if (result.currentPage != '1') {
-				$(".pages").append("<a class='page_item1' href='#' onclick='upload(" + text + "," + choose_a + "," + (Number(result.currentPage) - 1) + "); return false;' left='0px'>上一页</a>");
+				$(".pages").append("<a class='page_item1' href='#' onclick=\"upload(\'" + text + "\',\'" + choose_a + "\',\'" + (Number(result.currentPage) - 1) + "\'); return false;\" left='0px'>上一页</a>");
 			}
 			for (var i = 0; i < result.totalPages; i++) {
-				$(".pages").append("<a class = 'page_item2' href='#' href ='#' onclick='upload(" + text + "," + choose_a + "," + (i + 1) + "); return false;' left='0px'>" + (i + 1) + "</a>");
+				$(".pages").append("<a class = 'page_item2' href='#' href ='#' onclick=\"upload(\'" + text + "\',\'" + choose_a + "\',\'" + (i + 1) + "\'); return false;\" left='0px'>" + (i + 1) + "</a>");
 			}
-			$(".pages").append("<a class='page_item1' href='#'  onclick='upload(" + text + "," + choose_a + "," + (Number(result.currentPage) + 1) + "); return false;'>下一页</a>");
+			$(".pages").append("<a class='page_item1' href='#'  onclick=\"upload(\'" + text + "\',\'" + choose_a + "\',\'" + (Number(result.currentPage) + 1) + "\'); return false;\">下一页</a>");
 		} else if (result.totalPages > 10) {
 			if (result.currentPage != '1') {
-				$(".pages").append("<a class='page_item1' href='#'  onclick='upload(" + text + "," + choose_a + "," + (Number(result.currentPage) - 1) + "); return false;' left='0px'>上一页</a>");
+				$(".pages").append("<a class='page_item1' href='#'  onclick=\"upload(\'" + text + "\',\'" + choose_a + "\',\'" + (Number(result.currentPage) - 1) + "\'); return false;\" left='0px'>上一页</a>");
 			}
 			if (result.currentPage <= 5) {
 				for (var i = 0; i < 10; i++) {
-					$(".pages").append("<a class = 'page_item2' href='#'  onclick='upload(" + text + "," + choose_a + "," + (i + 1) + "); return false;' left='0px'>" + (i + 1) + "</a>");
+					$(".pages").append("<a class = 'page_item2' href='#'  onclick=\"upload(\'" + text + "\',\'" + choose_a + "\',\'" + (i + 1) + "\'); return false;\" left='0px'>" + (i + 1) + "</a>");
 				}
 			} else {
 				for (var i = 0; i < 10; i++) {
-					$(".pages").append("<a class='page_item2' href='#'  onclick='upload(" + text + "," + choose_a + "," + (result.currentPage - 4 + i) + "); return false;' left='0px'>" + (result.currentPage - 4 + i) + "</a>");
+					$(".pages").append("<a class='page_item2' href='#'  onclick=\"upload(\'" + text + "\',\'" + choose_a + "\',\'" + (result.currentPage - 4 + i) + "\'); return false;\" left='0px'>" + (result.currentPage - 4 + i) + "</a>");
 				}
 			}
-			$(".pages").append("<a class='page_item1' href='#' onclick='upload(" + text + "," + choose_a + "," + (Number(result.currentPage) + 1) + "); return false;'  >下一页</a>");
+			$(".pages").append("<a class='page_item1' href='#' onclick=\"upload(\'"+text+"\',\'"+choose_a+"\',\'"+(Number(result.currentPage)+1)+"\'); return false;\"	>下一页</a>");
 		} else {
 			$(".pages").append("没有更多的数据");
 		}
+		$(".page_item2").filter(function(){
+			return $(this).text() == result.currentPage;
+		}).css("text-decoration", "underline");
 	});
 };
 
@@ -123,3 +123,4 @@ function uploadid(id) {
 		"id": id
 	});
 }
+

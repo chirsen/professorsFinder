@@ -34,14 +34,11 @@
 }
 
 .container{
-	position: absolute;
-	top:4.0rem;
 	width: 80%;
 }
 
 .pages{
 	height: 1.5rem;
-	border: 1px solid #647ED9;
 	background-color: #fefefe;
 }
 
@@ -51,8 +48,8 @@
 	height: :1.5rem;
 }
 
-.page_item1{width: 6rem;}
-.page_item2{width: 3rem;}
+.page_item1{width: 6rem; text-decoration: none;}
+.page_item2{width: 3rem;margin-left: 10px; text-decoration: none;}
 
 .choose{
 	position: absolute;
