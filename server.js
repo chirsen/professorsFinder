@@ -8,6 +8,7 @@ var util = require('util');
 var mysql = require('mysql');
 
 var app = express();
+//数据库连接配置
 var pool = mysql.createPool({
 	connectionLimit: 10,
 	host: 'localhost',
@@ -60,8 +61,9 @@ app.get("/upload", function(req, res) {
 		var myCars = new Array();
 		myCars[0] = "%";
 		for (var i = 0; i < text.length; i++) {
-			if(text.charAt(i) == "%" || text.charAt(i) == "*" text.charAt(i) == "")
-			myCars[i + 1] = text.charAt(i) + "%";
+			if(text.charAt(i) != '*' && text.charAt(i) != ' ' && text.charAt(i) != '!'&&text.charAt(i) != '@'&&text.charAt(i) != '*'&&text.charAt(i) != '&'
+				&& text.charAt(i) != '$'&&text.charAt(i) != '-' && text.charAt(i) != '￥')
+				myCars[i + 1] = text.charAt(i) + "%";
 		}
 		text = myCars.join("");
 		//log中打印拼接后的字符串
@@ -97,6 +99,7 @@ app.get("/upload", function(req, res) {
 				professors[j++] = professor;
 				console.log(rows[i].name);
 			}
+			//构造需要传递的JSON对象
 			var result = {"currentPage":currentPage, "totalPages":(rowsSize/10), "professors": professors};
 			console.log(result);
 			connction.release();
@@ -126,6 +129,7 @@ app.get("/uploadid", function(req, res){
 	});
 });
 
+//服务器启动，监听8081端口
 var server = app.listen(8081, function() {
 	var host = server.address().address;
 	var port = server.address().port;
